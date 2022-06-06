@@ -37,7 +37,7 @@ router.post('/createUser',[
         const JWT_SECRERT="Divya";
         var token = jwt.sign(data, JWT_SECRERT);
         console.log(token);
-        res.json({token});
+        return res.json({token});
 
     }
     catch(err){
@@ -46,6 +46,51 @@ router.post('/createUser',[
     }
     
     
-})
+});
+
+//login a user using post '/api/auth/login
+router.post('/login',[
+    body('email', 'enter valid email').isEmail(),
+    body('password','password should not be empty').exists()
+],async (req,res)=>{
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+        }
+        const {email,password}=req.body;
+        let user=await User.findOne({email});
+        if(!user){
+            return res.status(400).json({error:"Please try to login with correct credentials"});
+
+        }
+        const passwordCompare= await bcrypt.compare(password,user.password);
+        if(!passwordCompare){
+            return res.status(400).json({error:"Please try to login with correct credentials"}); 
+        }
+
+        const data={
+            user:{
+                id:user.id
+            }
+        }
+        const JWT_SECRERT="Divya";
+        var token = jwt.sign(data, JWT_SECRERT);
+        console.log(token);
+        return res.json({token});
+
+
+
+
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({err});
+    }
+
+
+});
+
+
+
 
 module.exports=router;
