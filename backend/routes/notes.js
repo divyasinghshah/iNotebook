@@ -48,7 +48,40 @@ router.post('/addnote',[
 
     }
 
-})
+});
+
+router.put('/updatenote/:id',[
+    body('title', 'enter valid title').isLength({min:5}),
+    body('description','description length should be atleast 5').isLength({ min: 5 }),
+    body('tag','tag length should be atleast 5').isLength({ min: 5 })
+],fetchUser, async(req,res)=>{
+    const {title,description,tag}=req.body;
+    try{
+        const newNote={
+            title:title,
+            description:description,
+            tag:tag
+        }
+        let note= await Notes.findById(req.params.id);
+        if(!note){
+            return res.status(404).send("Not found");
+        }
+        if(note.user.toString()!==req.user.id){
+            return res.status(401).send("Not Allowed");
+        }
+
+        note=await Notes.findByIdAndUpdate(req.params.id,{$set:newNote},{new:true});
+        return res.send(note);
+
+
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send("Some error occured");
+
+    }
+
+});
+
 
 
 module.exports=router;
