@@ -9,10 +9,11 @@ import {
 import { Home } from './components/Home';
 import { About } from './components/About';
 import { Navbar } from './components/Navbar';
-
+import NoteState from './context/notes/noteState';
 function App() {
   return (
     <>
+    <NoteState>
     <BrowserRouter>
     <Navbar/>
     <Routes>
@@ -22,6 +23,7 @@ function App() {
         
     </Routes>
     </BrowserRouter>
+    </NoteState>
     </>
    
   );
