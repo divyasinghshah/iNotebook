@@ -16,7 +16,7 @@ const NoteItems = (props) => {
                     
 
                     </div>
-                    <h5 class="card-title">{note.title}</h5>
+                  
                     <p class="card-text">{note.description}</p>
                 </div>
             </div>
