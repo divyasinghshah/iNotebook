@@ -4,7 +4,7 @@ import NoteContext from "./noteContext";
 
 const NoteState=(props)=>{
     const host="http://localhost:5000";
-    const initialNotes=[ ];
+    const initialNotes=[];
       const [notes, setnotes] = useState(initialNotes);
       //getNotes
       const getNotes=async()=>{
@@ -58,23 +58,27 @@ const NoteState=(props)=>{
       // Edit Node
       const editNote= async (id,title,description,tag)=>{
         const response= await fetch(`${host}/api/notes/updatenote/${id}`,{
-            method:'POST',
+            method:'PUT',
             headers:{
                 'Content-Type':'application/json',
                 "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI5ZTQ4NTJkYWFhOWYzMWM1YjQyMDM3In0sImlhdCI6MTY1NDc4NTM4Mn0.42leA9VXdMtBnyptSnEMmyZOzS-HX1O9cnEUQBPeh9c"
             },
             body:JSON.stringify({title,description,tag})
         });
-        const json=response.json();
-        for(let i=0;i<notes.length;i++){
-            const element=notes[i];
+        const json=await response.json();
+        let newNotes=JSON.parse(JSON.stringify(notes));
+        for(let i=0;i<newNotes.length;i++){
+            const element=newNotes[i];
             if(element._id===id){
-                element.title=title;
-                element.description=description;
-                element.tag=tag;
+                newNotes[i].title=title;
+                newNotes[i].description=description;
+                newNotes[i].tag=tag;
+                break;
             }
+            
 
         }
+        setnotes(newNotes);
           
     }
 
