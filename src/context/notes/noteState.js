@@ -50,7 +50,10 @@ const NoteState=(props)=>{
       }
 
       //Delete Node
-      const deleteNote=()=>{
+      const deleteNote=(id)=>{
+        //TODO API CALL
+        const newNotes=notes.filter((note)=>{return note._id!==id});
+        setnotes(newNotes);
           
     }
 
