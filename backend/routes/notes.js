@@ -39,7 +39,7 @@ router.post('/addnote',[
             user:req.user.id
         })
 
-        return res.json({notes});
+        return res.json(notes);
 
 
     }catch(err){
